@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using Cartao.Corban.Infra;
+using Hangfire;
 using Hangfire.MemoryStorage;
 
 namespace Cartao.Corban.Extensoes
@@ -18,6 +19,7 @@ namespace Cartao.Corban.Extensoes
                 DelaysInSeconds = new int[] { 300 }
             });
             services.AddHangfireServer();
+            
         }
 
         public static void Configure(this IApplicationBuilder app)

@@ -10,10 +10,22 @@ namespace Cartao.Corban.Servicos
     public class PropostaService : IPropostaService
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public PropostaService(HttpClient httpClient)
+        public PropostaService(HttpClient httpClient
+            , IConfiguration configuration)
         {
-            _httpClient = httpClient;
+            _configuration = configuration;
+            //.GetSection("UrlProposta").GetValue("BaseAdress").ToString();
+
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(_configuration["UrlProposta:BaseAdress"].ToString())
+            };
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+
         }
         public async Task<bool> AdicionarProposta(PropostaBaseDto propostaDto)
         {

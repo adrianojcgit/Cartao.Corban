@@ -12,17 +12,10 @@ namespace Cartao.Corban.Servicos
 {
     public class BrokerConsumerService : IBrokerConsumerService
     {
-        private readonly HttpClient _http;
         private readonly IPropostaService _propostaService;
 
         public BrokerConsumerService(IPropostaService propostaService)
         {
-            _http = new HttpClient
-            {
-                BaseAddress = new Uri("https://localhost:7232/")
-            };
-            _http.DefaultRequestHeaders.Accept.Clear();
-            _http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _propostaService = propostaService;
         }
 
