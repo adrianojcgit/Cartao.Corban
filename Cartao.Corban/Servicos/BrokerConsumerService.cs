@@ -13,7 +13,9 @@ namespace Cartao.Corban.Servicos
     public class BrokerConsumerService : IBrokerConsumerService
     {
         private readonly HttpClient _http;
-        public BrokerConsumerService()
+        private readonly IPropostaService _propostaService;
+
+        public BrokerConsumerService(IPropostaService propostaService)
         {
             _http = new HttpClient
             {
@@ -21,6 +23,7 @@ namespace Cartao.Corban.Servicos
             };
             _http.DefaultRequestHeaders.Accept.Clear();
             _http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _propostaService = propostaService;
         }
 
         public async Task ExecutaHngFire()
@@ -93,16 +96,8 @@ namespace Cartao.Corban.Servicos
         {
             try
             {
-                var jsonContent = JsonConvert.SerializeObject(propostaDto);
-                var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-                contentString.Headers.ContentType = new
-                MediaTypeHeaderValue("application/json");
-                HttpResponseMessage response = await _http.PostAsync("Proposta", contentString);
-
-                if (!response.IsSuccessStatusCode)
-                    return false;                    
-                
-                return true;
+                var ret = await _propostaService.AdicionarProposta(propostaDto);
+                return ret;
             }
             catch (Exception)
             {
